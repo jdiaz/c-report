@@ -1,7 +1,7 @@
 package main
 
 import (
-	//"encoding/csv"
+	"encoding/csv"
 	"flag"
 	"fmt"
 	"os"
@@ -40,7 +40,9 @@ func main() {
 	fmt.Printf("Searching for .%s files in %s...\n", extension, root)
 	matches := make([]string, 0)
 	filepath.Walk(root, walkWithExtraParams(extension, &matches))
-	/*file, err := os.Create("creport.csv")
+	fmt.Println("Search complete.")
+	fmt.Println("Creating report")
+	file, err := os.Create("creport.csv")
 	defer file.Close()
 	if err != nil {
 		fmt.Println(err)
@@ -48,10 +50,11 @@ func main() {
 	writer := csv.NewWriter(file)
 	defer writer.Flush()
 	for _, value := range matches {
-		err := writer.Write(value)
+		s := make([]string, 0)
+		s = append([]string{value})
+		err := writer.Write(s)
 		if err != nil {
 			fmt.Println(err)
 		}
-	}*/
-	fmt.Println("Search complete.")
+	}
 }
