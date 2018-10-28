@@ -7,6 +7,7 @@ import (
 	"os"
 	"path/filepath"
 	"strings"
+	"strconv"
 )
 
 func banner() string {
@@ -25,10 +26,30 @@ func walkWithExtraParams(extension string, matches *[]string) filepath.WalkFunc 
 		parts := strings.Split(path, ".")
 		n := len(parts)
 		if parts[n-1] == extension {
-			fmt.Printf("File match found: %s\n", path)
+			fmt.Printf("  File match found: %s\n", path)
 			*matches = append(*matches, path)
 		}
 		return nil
+	}
+}
+
+func writeToCSV(filename string, data []string) {
+	file, err := os.Create(filename)
+	defer file.Close()
+	if err != nil {
+		fmt.Println(err)
+	}
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+	// header
+	writer.Write([]string{"", "File"})
+	// rows
+	for row, value := range data {
+		s := []string{strconv.Itoa(row + 1), value}
+		err := writer.Write(s)
+		if err != nil {
+			fmt.Println(err)
+		}
 	}
 }
 
@@ -41,20 +62,7 @@ func main() {
 	matches := make([]string, 0)
 	filepath.Walk(root, walkWithExtraParams(extension, &matches))
 	fmt.Println("Search complete.")
-	fmt.Println("Creating report")
-	file, err := os.Create("creport.csv")
-	defer file.Close()
-	if err != nil {
-		fmt.Println(err)
-	}
-	writer := csv.NewWriter(file)
-	defer writer.Flush()
-	for _, value := range matches {
-		s := make([]string, 0)
-		s = append([]string{value})
-		err := writer.Write(s)
-		if err != nil {
-			fmt.Println(err)
-		}
-	}
+	fmt.Println("Creating report...")
+	writeToCSV("creport.csv", matches)
+	fmt.Println("Report created.")
 }
