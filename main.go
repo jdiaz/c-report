@@ -3,31 +3,34 @@ package main
 import (
 	"flag"
 	"fmt"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 	"strings"
 )
 
+func banner() string {
+	return `
+   ____   ____                       _    
+  / ___| |  _ \ ___ _ __   ___  _ __| |_  
+ | |     | |_) / _ \ '_ \ / _ \| '__| __| 
+ | |___  |  _ <  __/ |_) | (_) | |  | |_  
+  \____| |_| \_\___| .__/ \___/|_|   \__| 
+                   |_|                    
+ `
+}
+
 func visit(path string, f os.FileInfo, err error) error {
+	//fmt.Println(path)
 	parts := strings.Split(path, ".")
-	if len(parts) != 2 {
-		return nil
-	}
-	if parts[1] == "crypto" {
+	n := len(parts)
+	if parts[n-1] == "crypto" {
 		fmt.Printf("File match in: %s\n", path)
 	}
 	return nil
 }
 
 func main() {
-	file, err := ioutil.ReadFile("banner.txt")
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	banner := string(file)
-	fmt.Println(banner)
+	fmt.Println(banner())
 	fmt.Printf("Searching for .crypto files...\n")
 	flag.Parse()
 	root := flag.Arg(0)
