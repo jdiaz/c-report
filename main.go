@@ -1,6 +1,7 @@
 package main
 
 import (
+	//"encoding/csv"
 	"flag"
 	"fmt"
 	"os"
@@ -19,20 +20,38 @@ func banner() string {
  `
 }
 
-func visit(path string, f os.FileInfo, err error) error {
-	parts := strings.Split(path, ".")
-	n := len(parts)
-	if parts[n-1] == "crypto" {
-		fmt.Printf("File match in: %s\n", path)
+func walkWithExtraParams(extension string, matches *[]string) filepath.WalkFunc {
+	return func(path string, f os.FileInfo, err error) error {
+		parts := strings.Split(path, ".")
+		n := len(parts)
+		if parts[n-1] == extension {
+			fmt.Printf("File match found: %s\n", path)
+			*matches = append(*matches, path)
+		}
+		return nil
 	}
-	return nil
 }
 
 func main() {
 	fmt.Println(banner())
-	fmt.Printf("Searching for .crypto files...\n")
 	flag.Parse()
 	root := flag.Arg(0)
-	filepath.Walk(root, visit)
+	extension := flag.Arg(1)
+	fmt.Printf("Searching for .%s files in %s...\n", extension, root)
+	matches := make([]string, 0)
+	filepath.Walk(root, walkWithExtraParams(extension, &matches))
+	/*file, err := os.Create("creport.csv")
+	defer file.Close()
+	if err != nil {
+		fmt.Println(err)
+	}
+	writer := csv.NewWriter(file)
+	defer writer.Flush()
+	for _, value := range matches {
+		err := writer.Write(value)
+		if err != nil {
+			fmt.Println(err)
+		}
+	}*/
 	fmt.Println("Search complete.")
 }
