@@ -1,7 +1,7 @@
 C Report
 ========
 
-C report is a CLI tool that scans a given directory in an attempt to find files matching desired file extension and generates a CSV report of the findings. 
+C report is a CLI tool that scans a given directory in an attempt to find files matching desired file extension. The results are conveniently written to a CSV file.
 
 #### UNIXish Usage
 
@@ -9,10 +9,10 @@ C report is a CLI tool that scans a given directory in an attempt to find files 
 ![](screenshots/creport_help.png)
 
 **Run**
-![](screenshots/creport_usage.png)
+![](screenshots/creport_run.png)
 
 #### Windows Usage
-![](screenshots/creport_usage_win.png)
+![](screenshots/creport_run_win.png)
 
 **Output**
 ![](screenshots/creport_csv)
