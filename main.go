@@ -20,7 +20,6 @@ func banner() string {
 }
 
 func visit(path string, f os.FileInfo, err error) error {
-	//fmt.Println(path)
 	parts := strings.Split(path, ".")
 	n := len(parts)
 	if parts[n-1] == "crypto" {
