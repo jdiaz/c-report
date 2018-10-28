@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"os"
 	"path/filepath"
-	"strings"
 	"strconv"
+	"strings"
 )
 
 func banner() string {
