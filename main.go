@@ -55,12 +55,12 @@ func writeToCSV(filename string, data []string) {
 
 func main() {
 	fmt.Println(banner())
+	root := flag.String("path", "/", "The directory to search")
+	extension := flag.String("ext", "crypto", "The extension of the files to find")
 	flag.Parse()
-	root := flag.Arg(0)
-	extension := flag.Arg(1)
-	fmt.Printf("Searching for .%s files in %s...\n", extension, root)
+	fmt.Printf("Searching for .%s files in %s...\n", *extension, *root)
 	matches := make([]string, 0)
-	filepath.Walk(root, walkWithExtraParams(extension, &matches))
+	filepath.Walk(*root, walkWithExtraParams(*extension, &matches))
 	fmt.Println("Search complete.")
 	fmt.Println("Creating report...")
 	writeToCSV("creport.csv", matches)
