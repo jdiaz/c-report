@@ -15,7 +15,7 @@ C report is a CLI tool that scans a given directory in an attempt to find files 
 ![](screenshots/creport_run_win.png)
 
 **Output**
-![](screenshots/creport_csv)
+![](screenshots/creport_csv.png)
 
 ## License & Distribution
 The distribution file has built versions for both Mac and windows. Code is distributed under the MIT license, knock youself out.
