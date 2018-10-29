@@ -1,13 +1,14 @@
 package main
 
 import (
+	"bufio"
 	"encoding/csv"
-	"flag"
 	"fmt"
 	"os"
 	"path/filepath"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func banner() string {
@@ -55,14 +56,25 @@ func writeToCSV(filename string, data []string) {
 
 func main() {
 	fmt.Println(banner())
-	root := flag.String("path", "/", "The directory to search")
-	extension := flag.String("ext", "crypto", "The extension of the files to find")
-	flag.Parse()
-	fmt.Printf("Searching for .%s files in %s...\n", *extension, *root)
+	reader := bufio.NewReader(os.Stdin)
+
+	fmt.Print("Input a directory to scan: i.e. C:\\ in Windows or /Users in Linux\n> ")
+	root, _ := reader.ReadString('\n')
+	root = strings.Replace(root, "\n", "", -1)
+	fmt.Print("Input file extension to find files\n> ")
+	extension, _ := reader.ReadString('\n')
+	extension = strings.Replace(extension, "\n", "", -1)
+	fmt.Printf("Searching for .%s files in %s...\n", extension, root)
+
 	matches := make([]string, 0)
-	filepath.Walk(*root, walkWithExtraParams(*extension, &matches))
+	filepath.Walk(root, walkWithExtraParams(extension, &matches))
 	fmt.Println("Search complete.")
 	fmt.Println("Creating report...")
-	writeToCSV("creport.csv", matches)
+	t := time.Now()
+	dateStr := fmt.Sprintf("%d-%02d-%02dT%02d:%02d:%02d-00:00\n",
+		t.Year(), t.Month(), t.Day(),
+		t.Hour(), t.Minute(), t.Second())
+	filename := fmt.Sprintf("%s-c-report.csv", dateStr)
+	writeToCSV(filename, matches)
 	fmt.Println("Report created.")
 }
