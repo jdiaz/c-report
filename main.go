@@ -8,6 +8,7 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"time"
 )
 
 func banner() string {
@@ -63,6 +64,11 @@ func main() {
 	filepath.Walk(*root, walkWithExtraParams(*extension, &matches))
 	fmt.Println("Search complete.")
 	fmt.Println("Creating report...")
-	writeToCSV("creport.csv", matches)
+	t := time.Now()
+	dateStr := fmt.Sprintf("%d-%02d-%02dT%02d:%02d:%02d-00:00\n",
+		t.Year(), t.Month(), t.Day(),
+		t.Hour(), t.Minute(), t.Second())
+	filename := fmt.Sprintf("%s-c-report.csv", dateStr)
+	writeToCSV(filename, matches)
 	fmt.Println("Report created.")
 }
